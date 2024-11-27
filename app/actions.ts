@@ -3,16 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 
-// export async function insertTodo(content: string) {
-//   await prisma.todo.create({
-//     data: {
-//       content,
-//       checked: false,
-//     },
-//   });
+export async function insertCategory(name: string) {
+  await prisma.category.create({
+    data: {
+      name,
+    },
+  });
 
-//   revalidatePath("/");
-// }
+  revalidatePath("/");
+}
 
 // export async function deleteTodo(id: number) {
 //   await prisma.todo.delete({ where: { id } });
