@@ -8,37 +8,48 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   name      String?
-  role      Role        @default(USER)
-  trainings Trainings[]
-}
-
-model Exercises {
-  id          Int        @id @default(autoincrement())
-  name        String
-  description String
-  published   Boolean    @default(true)
-  categories  Category[]
-  trainings   Trainings? @relation(fields: [trainingsId], references: [id])
-  trainingsId Int?
+  role      Role       @default(USER)
+  trainings Training[]
 }
 
 model Category {
-  id    Int         @id @default(autoincrement())
-  name  String
-  posts Exercises[]
+  id       Int        @id @default(autoincrement())
+  name     String
+  exercise Exercise[]
 }
 
-model Trainings {
-  id        Int         @id @default(autoincrement())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  info      String
-  exercises Exercises[]
-  User      User?       @relation(fields: [userId], references: [id])
-  userId    Int?
+model Exercise {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  tariningElement TrainingElement[]
+  Category        Category         @relation(fields: [categoryId], references: [id])
+  categoryId      Int
+}
+
+model TrainingElement {
+  id         Int       @id @default(autoincrement())
+  info       String
+  comment    String
+  exercise   Exercise  @relation(fields: [exerciseId], references: [id])
+  exerciseId Int
+  training   Training @relation(fields: [trainingId], references: [id])
+  trainingId Int
+}
+
+model Training {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trainingElement TrainingElement[]
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 enum Role {
